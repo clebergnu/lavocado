@@ -1,0 +1,3 @@
+avocado-framework
+libvirt-python
+Jinja2
