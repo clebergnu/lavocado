@@ -1,0 +1,20 @@
+<domain type='kvm'>
+  <name>{{name|default("lavocado-test")}}</name>
+  <memory unit='KiB'>{{memory|default(4194304)}}</memory>
+  <vcpu placement='static'>{{vcpus|default(4)}}</vcpu>
+  <os>
+    <type arch='{{arch|default("x86_64")}}' machine='{{machine|default("q35")}}'>hvm</type>
+    <boot dev='hd'/>
+  </os>
+  <devices>
+    <emulator>/usr/bin/qemu-system-x86_64</emulator>
+    <disk type='file' device='disk'>
+      <driver name='qemu' type='qcow2'/>
+      <source file='{{image}}'/>
+      <target dev='vda' bus='virtio'/>
+    </disk>
+    <console type='pty'>
+      <target type='serial' port='0'/>
+    </console>
+  </devices>
+</domain>
