@@ -39,6 +39,11 @@ If you wish you can run this command under a virtual environment.
    when getting images, Avocado will create a snapshot to avoid conflicts. Also
    domains created by tests have unique names to avoid collisions.
 
+ * Creating domains easily: You can use the `.create_domain()` method to create
+   a generic domain which is based on a Jinja2 template. If you want to use an
+   already existing XML domain description, no problem, use
+   `Domain.from_xml_path()` instead.
+
  * Multiple output formats: TAP, HTML, JSON, xUnit (Gitlab CI ready).
 
  * Test tags: Ability to mark tests with tags, for filtering during execution
@@ -72,11 +77,12 @@ commands:
 ```
 
 Please note that the Next Runner (nrunner) will be the default runner soon in
-Avocado. So `--test-runner='nrunner'` can be removed.
+Avocado. So `--test-runner='nrunner'` option will no longer be needed.
 
 ## Writing Tests
 
-You can write your tests here the same way you write for Avocado Framework.
+You can write your tests here the same way you write for the [Avocado
+Framework](https://avocado-framework.readthedocs.io/en/latest/).
 Avocado supports "simple tests" (just executables) and "instrumented tests"
 (Python tests).
 
