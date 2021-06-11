@@ -24,6 +24,7 @@ from avocado import Test
 from avocado.utils import vmimage
 
 from lavocado import defaults
+from lavocado.exceptions import TestSetupException
 from lavocado.helpers.domains import Domain
 
 
@@ -54,34 +55,39 @@ class LibvirtTest(Test):
                    + self.defaults.LIBVIRT_URI)
             self.cancel(msg)
 
-    # TODO: Use @fail_on decorator
-    def create_domain(self, arguments=None, fail=False):
+    def create_domain(self, arguments=None):
         """Creates a libvirt domain based on a generic template.
 
         This will receive some arguments that will be rendered on the
         template.  For more information about the arguments, see
-        templates/domain.xml.jinja. By default this method will not fail
-        the test, instead will mark the test as ERROR if any issue
-        happens here.
+        templates/domain.xml.jinja.
+
+        If you are using this method from a test method (different from
+        setUp()), AND you would like to count its call as a "setup/bootstrap"
+        stage, consider using the following Avocado decorator:
+
+        from avocado.core.decorators import cancel_on
+
+        @cancel_on(TestSetupException)
+        def test_foo(self):
+          ...
+
+        In that way, your test will not FAIL, instead it will be cancelled in
+        case of any problem during this bootstrap.
 
         :param dict arguments: A key,value dictionary with the arguments
                                to be replaced on the template. If
                                any missing argument, template will be
                                rendered with default values.
-        :param bool fail: If True, any error during this execution will
-                          trigger a test fail, otherwise, will trigger a
-                          test error. Default is False.
         """
         try:
             return Domain.from_xml_template(self.conn, self.id(), arguments)
+        # This will catch any avocado exception plus any os error
         except Exception as ex:
             msg = f"Failed to create domain: {ex}"
-            if fail:
-                self.fail(msg)
-            else:
-                self.error(msg)
+            raise TestSetupException(msg) from ex
 
-    def get_generic_image(self, fail=False):
+    def get_generic_image(self):
         """Ask Avocado to fetch an VM image snapshot.
 
         Avocado will handle if image is already downloaded into the
@@ -90,9 +96,18 @@ class LibvirtTest(Test):
         This will return an Image object pointing to a snapshot file. So
         multiple calls of this method will never return the same object.
 
-        :param bool fail: If True, any error during this execution will
-                          trigger a test fail, otherwise, will trigger a
-                          test error. Default is False.
+        If you are using this method from a test method (different from
+        setUp()), AND you would like to count its call as a "setup/bootstrap"
+        stage, consider using the following Avocado decorator:
+
+        from avocado.core.decorators import cancel_on
+
+        @cancel_on(TestSetupException)
+        def test_foo(self):
+          ...
+
+        In that way, your test will not FAIL, instead it will be cancelled in
+        case of any problem during this bootstrap.
         """
         image = self.defaults.VMIMAGE
         try:
@@ -100,12 +115,10 @@ class LibvirtTest(Test):
                                version=image.get('version'),
                                cache_dir=self.defaults.CACHE_DIR,
                                checksum=image.get('checksum'))
+        # This will catch any error, including avocado exceptions + OS errors
         except Exception as ex:
             msg = f"Failed to get a generic image: {ex}"
-            if fail:
-                self.fail(msg)
-            else:
-                self.error(msg)
+            raise TestSetupException(msg) from ex
 
     def tearDown(self):
         """Shutdown after each test.

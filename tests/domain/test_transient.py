@@ -30,6 +30,7 @@ class TransientDomain(LibvirtTest):
     def setUp(self):
         super().setUp()
         self.image = self.get_generic_image()
+        self.domain = self.create_domain(arguments={'image': self.image.path})
 
     def test_lifecycle(self):
         """Creating and destroying a new transient domain.
@@ -37,21 +38,19 @@ class TransientDomain(LibvirtTest):
         A transient domain has no configuration file so, once destroyed, all
         trace of the domain should disappear.
         """
-        domain = self.create_domain(arguments={'image': self.image.path},
-                                    fail=True)
-        name = domain.name()
-        state, _ = domain.state()
+        name = self.domain.name()
+        state, _ = self.domain.state()
         self.assertTrue(state, libvirt.VIR_DOMAIN_RUNNING)
 
         try:
-            domain.destroy()
+            self.domain.destroy()
         except Exception as ex:
             self.fail(f"destroy() raised an exception: {ex}")
 
         with self.assertRaises(libvirt.libvirtError) as context:
             self.conn.lookupByName(name)
 
-        expected = f"no domain with matching name '{domain.name()}'"
+        expected = f"no domain with matching name '{self.domain.name()}'"
         self.assertTrue(expected in str(context.exception))
 
     def test_autostart(self):
@@ -61,12 +60,10 @@ class TransientDomain(LibvirtTest):
         error message when used on a transient domain.
         """
 
-        domain = self.create_domain(arguments={'image': self.image.path},
-                                    fail=True)
-        self.assertFalse(domain.autostart())
+        self.assertFalse(self.domain.autostart())
 
         with self.assertRaises(libvirt.libvirtError) as context:
-            domain.setAutostart(True)
+            self.domain.setAutostart(True)
 
         expected = "cannot set autostart for transient domain"
         self.assertTrue(expected in str(context.exception))
@@ -79,21 +76,19 @@ class TransientDomain(LibvirtTest):
         the transient domain is running.
         """
         # Creating a new transient domain
-        domain = self.create_domain(arguments={'image': self.image.path},
-                                    fail=True)
-        name = domain.name()
+        name = self.domain.name()
 
         # Make sure is running and not persistent
-        state, _ = domain.state()
+        state, _ = self.domain.state()
         self.assertTrue(state, libvirt.VIR_DOMAIN_RUNNING)
-        self.assertFalse(domain.isPersistent())
+        self.assertFalse(self.domain.isPersistent())
 
         # Defining config for transient guest
-        new_domain = self.conn.defineXML(domain.XMLDesc())
+        new_domain = self.conn.defineXML(self.domain.XMLDesc())
         self.assertTrue(new_domain.isPersistent())
 
         # Destroying active domain
-        domain.destroy()
+        self.domain.destroy()
 
         # Checking that an inactive domain config still exists
         found = self.conn.lookupByName(name)

@@ -34,7 +34,6 @@ class Domain:
         xml_content = read_file(xml_path)
         return conn.createXML(xml_content)
 
-    # TODO: Catch TestSetupException on @fail_on
     @classmethod
     def from_xml_template(cls, conn, suffix, arguments=None):
         template_path = defaults.TEMPLATE_PATH
