@@ -113,14 +113,9 @@ class LibvirtTest(Test):
         This will destroy all previously created domains by this test, and
         remove any image snapshot if created.
         """
-        # TODO: At this point, we need only transient machines, use always
-        # destroy()
         for domain in self.conn.listAllDomains():
             if domain.name().endswith(self.id()):
-                if domain.isPersistent():
-                    domain.undefine()
-                else:
-                    domain.destroy()
+                domain.destroy()
 
         if hasattr(self, 'image') and isinstance(self.image, vmimage.Image):
             if os.path.exists(self.image.path):
