@@ -59,6 +59,11 @@ If you wish you can run this command under a virtual environment.
    the creation of multiple variations of parameters, and the execution of
    tests with those parameter variations.
 
+ * Clear separation between tests and bootstrap stages: If something fails
+   during the setUp() metod execution, your test will be not marked as FAIL,
+   instead it will be flagged as ERROR. You can also use some decorators
+   (@cancel_on, @skipUnless, ...) around your test to avoid false positves.
+
 ## Running
 
 After installing the requirements, you can run the tests with the following
