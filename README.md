@@ -33,9 +33,10 @@ If you wish you can run this command under a virtual environment.
 
 ## Features
 
- * Parallel execution: If your tests independent you can run those in parallel,
-   when getting images, Avocado will create a snapshot to avoid conflicts. Also
-   domains created by tests have unique names to avoid collisions.
+ * Parallel execution: If your tests are independent of each other, you can run
+   those in parallel, when getting images, Avocado will create a snapshot to
+   avoid conflicts. Also domains created by tests have unique names to avoid
+   collisions.
 
  * Multiple output formats: TAP, HTML, JSON, xUnit (Gitlab CI ready).
 
