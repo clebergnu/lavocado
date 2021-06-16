@@ -25,9 +25,11 @@ also to generate multiple output format artifacts (that can be uploaded to CI
 environments) and also the image fetch, so we don't need to handle with local
 cache, checksum and any other test's requirement task.
 
-In order to install the requirements, please execute the following command::
+In order to install the requirements, please execute the following command:
 
+```bash
   $ pip3 install -r requirements.txt
+```
 
 If you wish you can run this command under a virtual environment.
 
@@ -37,6 +39,11 @@ If you wish you can run this command under a virtual environment.
    those in parallel, when getting images, Avocado will create a snapshot to
    avoid conflicts. Also domains created by tests have unique names to avoid
    collisions.
+
+ * Creating domains easily: You can use the `.create_domain()` method to create
+   a generic domain which is based on a Jinja2 template. If you want to use an
+   already existing XML domain description, no problem, use
+   `Domain.from_xml_path()` instead.
 
  * Multiple output formats: TAP, HTML, JSON, xUnit (Gitlab CI ready).
 
@@ -68,13 +75,24 @@ If you wish you can run this command under a virtual environment.
 ## Running
 
 After installing the requirements, you can run the tests with the following
-commands::
+commands:
 
+```bash
   $ export PYTHONPATH=.:$PYTHONPATH
   $ avocado run --test-runner='nrunner' ./tests/domain/*.py
+```
 
-.. note:: The Next Runner (nrunner) will be the default runner soon in Avocado.
+Please note that the Next Runner (nrunner) will be the default runner soon in
+Avocado. So `--test-runner='nrunner'` option will no longer be needed.
 
 ## Writing Tests
 
-.. note:: TODO
+You can write your tests here the same way you write for the [Avocado
+Framework](https://avocado-framework.readthedocs.io/en/latest/).
+Avocado supports "simple tests" (just executables) and "instrumented tests"
+(Python tests).
+
+See the `tests/` folder for some references and ideas. In addition, feel free
+to read the [Avocado Test Writer’s
+Guide](https://avocado-framework.readthedocs.io/en/latest/guides/writer/) to
+play with some advanced features of the framework.

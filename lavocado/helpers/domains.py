@@ -28,7 +28,6 @@ from lavocado.exceptions import TestSetupException
 
 
 class Domain:
-    # TODO: Document this on README.rst
     @classmethod
     def from_xml_path(cls, conn, xml_path):
         xml_content = read_file(xml_path)
