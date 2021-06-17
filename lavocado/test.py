@@ -28,7 +28,7 @@ from lavocado.exceptions import TestSetupException
 from lavocado.helpers.domains import Domain
 
 
-class LibvirtTest(Test):
+class BaseLibvirtTest(Test):
     """Main class helper for tests.
 
     Any test that inherits from this class, will have some methods and

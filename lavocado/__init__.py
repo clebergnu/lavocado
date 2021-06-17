@@ -1,1 +1,7 @@
-test.py
+__all__ = ['LibvirtTest']
+
+from .test import BaseLibvirtTest
+
+
+class LibvirtTest(BaseLibvirtTest):
+    pass
