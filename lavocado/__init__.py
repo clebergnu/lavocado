@@ -1,1 +1,4 @@
-test.py
+__all__ = ['LibvirtTest']
+
+
+from lavocado.test import LibvirtTest
