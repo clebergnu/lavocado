@@ -85,6 +85,12 @@ commands:
 Please note that the Next Runner (nrunner) will be the default runner soon in
 Avocado. So `--test-runner='nrunner'` option will no longer be needed.
 
+Or, if you prefer, you can call it with `make`:
+
+```bash
+  $ make libvirt-tests
+```
+
 ## Writing Tests
 
 You can write your tests here the same way you write for the [Avocado
