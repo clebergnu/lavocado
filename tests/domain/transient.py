@@ -17,7 +17,7 @@
 
 import libvirt
 
-from lavocado import LibvirtTest
+from lavocado.test import LibvirtTest
 
 
 class TransientDomain(LibvirtTest):
