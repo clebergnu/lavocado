@@ -6,7 +6,7 @@ unit, functional and integration tests and it is inspired on the libvirt-tck
 framework, but instead of Perl it written in Python.
 
 The idea is to provide to the test writers helper classes to avoid boilerplate
-code, improve readability and code maintenance.
+code, improve code readability and maintenance.
 
 ## Disclaimer
 
@@ -56,8 +56,10 @@ If you wish you can run this command under a virtual environment.
    instance).
 
  * Requirements resolver: Avocado has implemented the 'requirements resolver'
-   feature that makes easy to define test requirements. For now it is still in
-   EXPERIMENTAL, but growing fast.
+   feature that makes it easy to define test requirements. Currently, The
+   RequirementsResolver can handle `assets` (any local or remote files) and
+   `packages` but new requirements are on the roadmap, including `ansible
+   playbooks`. For now, it is still only an experimental feature though.
 
  * Test result artifacts for future analysis: you can take a look at `avocado
    jobs` command or inspect your `~/avocado/test-results/` folder for more
